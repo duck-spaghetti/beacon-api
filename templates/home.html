@@ -28,8 +28,7 @@
   </style>
 </head>
 
-<body class="bg-gray-100 h-screen flex flex-col relative" x-data="uiState()" x-init="window.uiState = $data; init()"
->
+<body class="bg-gray-100 h-screen flex flex-col relative" data-lang="{{ lang }}" x-data="uiState()" x-init="window.uiState = $data; init()">
 
 <div class="fixed bottom-0 left-0 w-full bg-gray-900 text-white shadow flex justify-between px-6 py-2 z-40">
   <button @click="togglePanel('filter')" :class="panel === 'filter' ? 'bg-gray-800 text-indigo-400' : ''" class="flex flex-col items-center text-sm w-1/3 text-center rounded-md py-1">
@@ -101,8 +100,23 @@
       <button @click="panel = null" class="absolute top-2 right-2 text-gray-400 hover:text-black">✕</button>
       <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.settings.title }}</h2>
       <div class="flex flex-col gap-2 items-start">
-        <button class="text-sm text-indigo-600">{{ translations.panels.settings.language }}</button>
-        <button class="text-sm text-indigo-600">{{ translations.panels.settings.city }}</button>
+          <button @click="togglePanel('language')">{{ translations.panels.settings.language }}</button>
+          <p>{{ translations.panels.settings.city }} *unavailable</p>
+<!--          <button @click="togglePanel('city')">{{ translations.panels.settings.city }}* In arrivo</button>-->
+<!--        <button class="text-sm text-indigo-600">{{ translations.panels.settings.language }}</button>-->
+      </div>
+    </div>
+  </template>
+
+    <template x-if="panel === 'language'">
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[95%] bg-white rounded-lg shadow p-4 z-50">
+      <button @click="panel = null" class="absolute top-2 right-2 text-gray-400 hover:text-black">✕</button>
+      <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.settings.title }}</h2>
+      <div class="flex flex-col gap-2 items-start">
+        <a href="/it">Italiano</a>
+        <a href="/en">English</a>
+        <a href="/ar">العربية</a>
+        <p>e altre in arrivo</p>
       </div>
     </div>
   </template>
