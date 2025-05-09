@@ -23,8 +23,7 @@ def config():
     app.include_router(api_router)
     app.include_router(web_router)
 
+config()
 
 if __name__ == "__main__":
-    config()
-    uvicorn.run(app, host="0.0.0.0", port=10000)
-
+    uvicorn.run(app, host="127.0.0.1", port=8000)
