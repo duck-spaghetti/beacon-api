@@ -1,5 +1,5 @@
 // === iconLayerManager.js ===
-const layerKeys = ['dormire', 'documenti', 'mangiare', 'lavarsi', 'ascolto'];
+const layerKeys = ['dormire', 'documenti', 'mangiare', 'lavarsi', 'ascolto', 'curarsi'];
 const layers = {};
 
 export function initLayers(map) {

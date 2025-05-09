@@ -13,6 +13,7 @@
         "filters": {
           "mangiare": "Mangiare",
           "dormire": "Dormire",
+          "curarsi": "Curarsi",
           "lavarsi": "Lavarsi",
           "documenti": "Documenti",
           "ascolto": "Ascolto"

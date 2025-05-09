@@ -49,7 +49,10 @@
 
 <div class="relative flex-1 w-full">
   <div id="map" x-show="view === 'map'" class="absolute inset-0 z-10"></div>
-  <div id="list-view" x-show="view === 'list'" class="absolute inset-0 overflow-y-auto p-4 space-y-4 z-10 bg-gray-50"></div>
+<div id="list-view"
+     x-show="view === 'list'"
+     class="absolute inset-0 overflow-y-auto p-4 pb-[100px] space-y-4 z-10 bg-gray-50">
+</div>
 
   <template x-if="panel === 'filter'">
     <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[95%] bg-white rounded-lg shadow p-4 z-50">
@@ -101,7 +104,7 @@
       <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.settings.title }}</h2>
       <div class="flex flex-col gap-2 items-start">
           <button @click="togglePanel('language')">{{ translations.panels.settings.language }}</button>
-          <p>{{ translations.panels.settings.city }} *unavailable</p>
+<!--          <p>{{ translations.panels.settings.city }}</p>-->
 <!--          <button @click="togglePanel('city')">{{ translations.panels.settings.city }}* In arrivo</button>-->
 <!--        <button class="text-sm text-indigo-600">{{ translations.panels.settings.language }}</button>-->
       </div>
@@ -158,10 +161,11 @@
           mangiare: "{{ translations.panels.filter.filters.mangiare }}",
           dormire: "{{ translations.panels.filter.filters.dormire }}",
           lavarsi: "{{ translations.panels.filter.filters.lavarsi }}",
+          curarsi: "{{ translations.panels.filter.filters.curarsi }}",
           documenti: "{{ translations.panels.filter.filters.documenti }}",
           ascolto: "{{ translations.panels.filter.filters.ascolto }}"
         },
-        activeFilters: ['mangiare', 'dormire', 'lavarsi', 'documenti', 'ascolto'],
+        activeFilters: ['mangiare', 'dormire', 'lavarsi', 'curarsi'],
 
         userLat: null,
         userLon: null,
