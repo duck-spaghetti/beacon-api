@@ -18,6 +18,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get(
     "/services",
+    include_in_schema=False
     # response_model=List[api_schemas.Service]
 )
 def get_servizi(language_code: str = "it"):
@@ -25,7 +26,11 @@ def get_servizi(language_code: str = "it"):
     return data
 
 
-@router.get("/card-template", response_class=HTMLResponse)
+@router.get(
+    "/card-template",
+    response_class=HTMLResponse,
+    include_in_schema=False
+)
 def render_card(
     request: Request,
     name: str = Query(...),
@@ -36,10 +41,10 @@ def render_card(
     address: str = Query(...),
     phone: str = Query(...),
     view: str = Query("list"),
-    lang: str = Query("it"),
+    lang: str = Query("en"),
     # distance: float = Query(None)
 ):
-    template_name = "partials/list-card2.html" if view == "list" else "partials/popup-card2.html"
+    template_name = "partials/list-card.html" if view == "list" else "partials/popup-card.html"
     return templates.TemplateResponse(template_name, {
         "request": request,
         "lat": lat,
@@ -50,7 +55,6 @@ def render_card(
         "address": address,
         "phone": phone,
         "translations": utils.open_language(lang),
-        "lang": lang,
         # "distance": distance,
         "google_api_key": os.environ.get("GOOGLE_API_KEY"),
     })

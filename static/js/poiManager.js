@@ -1,4 +1,6 @@
 // === poiManager.js ===
+const lang = document.body.dataset.lang;
+
 import { getMap } from './mapManager.js';
 import { getIcon } from './iconManager.js';
 
@@ -42,7 +44,8 @@ export async function loadPOIs() {
               address: service.address,
               phone: service.phone,
               name: service.name,
-              view: 'popup'
+              view: 'popup',
+              lang: lang
             }
           }).then(res => marker.setPopupContent(res.data))
             .catch(() => marker.setPopupContent('<p>Errore nel caricamento</p>'));
@@ -57,7 +60,8 @@ export async function loadPOIs() {
               address: service.address,
               phone: service.phone,
               name: service.name,
-              view: 'list'
+              view: 'list',
+              lang: lang
           }
         }).then(res => {
           const cardWrapper = document.createElement('div');
