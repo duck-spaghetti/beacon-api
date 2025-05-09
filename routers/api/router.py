@@ -18,7 +18,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get(
     "/services",
-    include_in_schema=False
+    # include_in_schema=False
     # response_model=List[api_schemas.Service]
 )
 def get_servizi(language_code: str = "it"):
