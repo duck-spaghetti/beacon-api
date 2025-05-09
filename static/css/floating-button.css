@@ -1,0 +1,63 @@
+.floating-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9000;
+  width: 50px;
+  height: 50px;
+  background-color: #4e32bc;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.floating-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.floating-button img {
+  width: 50px;
+  height: 50px;
+}
+
+.view-toggle-buttons {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9900;
+}
+
+.view-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  transition: background 0.2s ease;
+}
+
+.view-button:hover {
+  background-color: #222;
+}
+
+.view-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.hidden {
+  display: none;
+}
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ dir }}">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guida Dove</title>
+
+  <!-- TailwindCSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js -->
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Leaflet Marker Cluster -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+
+  <style>
+    #map { height: 100%; }
+  </style>
+</head>
+
+<body class="bg-gray-100 h-screen flex flex-col relative" x-data="uiState()" x-init="window.uiState = $data; init()"
+>
+
+<div class="fixed bottom-0 left-0 w-full bg-gray-900 text-white shadow flex justify-between px-6 py-2 z-40">
+  <button @click="togglePanel('filter')" :class="panel === 'filter' ? 'bg-gray-800 text-indigo-400' : ''" class="flex flex-col items-center text-sm w-1/3 text-center rounded-md py-1">
+    <img src="/static/assets/icons/filter.svg" alt="{{ translations.navbar.filters }}" class="w-7 h-7 mb-1">
+    <span>{{ translations.navbar.filters }}</span>
+  </button>
+
+  <button @click="togglePanel('position')" :class="panel === 'position' ? 'bg-gray-800 text-indigo-400' : ''" class="flex flex-col items-center text-sm w-1/3 text-center rounded-md py-1">
+    <img src="/static/assets/icons/search.svg" alt="{{ translations.navbar.position }}" class="w-7 h-7 mb-1">
+    <span>{{ translations.navbar.position }}</span>
+  </button>
+
+  <button @click="togglePanel('settings')" :class="panel === 'settings' ? 'bg-gray-800 text-indigo-400' : ''" class="flex flex-col items-center text-sm w-1/3 text-center rounded-md py-1">
+    <img src="/static/assets/icons/settings.svg" alt="{{ translations.navbar.settings }}" class="w-7 h-7 mb-1">
+    <span>{{ translations.navbar.settings }}</span>
+  </button>
+</div>
+
+<div class="relative flex-1 w-full">
+  <div id="map" x-show="view === 'map'" class="absolute inset-0 z-10"></div>
+  <div id="list-view" x-show="view === 'list'" class="absolute inset-0 overflow-y-auto p-4 space-y-4 z-10 bg-gray-50"></div>
+
+  <template x-if="panel === 'filter'">
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[95%] bg-white rounded-lg shadow p-4 z-50">
+      <button @click="panel = null" class="absolute top-2 right-2 text-gray-400 hover:text-black">✕</button>
+      <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.filter.title }}</h2>
+      <div class="flex flex-col gap-4 items-start">
+        <div class="flex flex-wrap gap-2">
+          <template x-for="(label, key) in filters" :key="key">
+            <button
+              @click="toggleFilter(key)"
+              :class="activeFilters.includes(key) ? 'bg-[#3011af] text-white border-[#3011af]' : 'bg-white text-[#3011af] border border-[#3011af]'"
+              class="px-4 py-2 rounded-full text-sm font-semibold shadow-sm transition">
+              <span x-text="label"></span>
+            </button>
+          </template>
+        </div>
+        <div class="flex gap-2">
+          <button @click="selectAll()" class="flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium hover:bg-blue-200">{{ translations.panels.filter.select_all }}</button>
+          <button @click="deselectAll()" class="flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 rounded-full text-xs font-medium hover:bg-red-200">{{ translations.panels.filter.deselect_all }}</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template x-if="panel === 'position'">
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[95%] bg-white rounded-lg shadow p-4 z-50">
+      <button @click="panel = null" class="absolute top-2 right-2 text-gray-400 hover:text-black">✕</button>
+      <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.position.title }}</h2>
+      <div class="flex flex-col gap-3 items-start w-full">
+        <div class="w-full relative">
+          <input x-model="searchAddress" @input="fetchSuggestions" @focus="fetchSuggestions" type="text" placeholder="{{ translations.panels.position.input_placeholder }}" class="w-full border rounded px-3 py-2" />
+          <ul x-show="showSuggestions" class="absolute z-50 bg-white border rounded mt-1 w-full max-h-48 overflow-y-auto shadow">
+            <template x-for="(suggestion, index) in suggestions" :key="index">
+              <li @click="selectSuggestion(suggestion)" class="px-3 py-2 hover:bg-indigo-100 cursor-pointer text-sm" x-text="suggestion.display_name"></li>
+            </template>
+          </ul>
+        </div>
+        <div class="flex gap-2 w-full">
+          <button @click="startManualSelection()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300">{{ translations.panels.position.manual_select }}</button>
+          <button @click="getUserLocation()" class="flex-1 px-4 py-2 bg-indigo-100 text-indigo-800 rounded text-sm hover:bg-indigo-200">{{ translations.panels.position.use_current }}</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template x-if="panel === 'settings'">
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[95%] bg-white rounded-lg shadow p-4 z-50">
+      <button @click="panel = null" class="absolute top-2 right-2 text-gray-400 hover:text-black">✕</button>
+      <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.settings.title }}</h2>
+      <div class="flex flex-col gap-2 items-start">
+        <button class="text-sm text-indigo-600">{{ translations.panels.settings.language }}</button>
+        <button class="text-sm text-indigo-600">{{ translations.panels.settings.city }}</button>
+      </div>
+    </div>
+  </template>
+</div>
+
+<div x-show="userSelecting" class="absolute inset-0 z-50 flex flex-col items-center justify-start pointer-events-none">
+  <div class="mt-2 bg-yellow-100 bg-opacity-70 backdrop-blur-sm text-yellow-800 px-3 py-1 rounded shadow text-xs pointer-events-auto z-50">
+    {{ translations.manual_selection.hint }}
+  </div>
+  <button @click="cancelManualSelection()" class="mt-2 bg-red-600 text-white px-4 py-2 rounded-full shadow text-xs pointer-events-auto z-50">
+    {{ translations.manual_selection.cancel }}
+  </button>
+</div>
+
+<div class="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-30">
+  <button @click="toggleView()" class="min-w-[80px] h-10 px-4 bg-indigo-600 text-white rounded-full shadow flex items-center justify-center text-sm font-medium gap-2 transition">
+    <template x-if="view === 'map'">
+      <img src="/static/assets/icons/list.svg" alt="{{ translations.toggle_button.list }}" class="w-5 h-5">
+    </template>
+    <template x-if="view === 'list'">
+      <img src="/static/assets/icons/map.svg" alt="{{ translations.toggle_button.map }}" class="w-5 h-5">
+    </template>
+    <span x-text="view === 'map' ? '{{ translations.toggle_button.list }}' : '{{ translations.toggle_button.map }}'"></span>
+  </button>
+</div>
+
+<button @click="centerUserPosition()" class="fixed top-4 right-4 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow z-50 flex items-center justify-center">
+  <img src="/static/assets/icons/center-position.svg" alt="{{ translations.center_button.alt }}" class="w-7 h-7">
+</button>
+  
+
+  <!-- Script UI Alpine -->
+  <script>
+    function uiState() {
+      return {
+        panel: null,
+        view: 'map',
+        filters: {
+          mangiare: "{{ translations.panels.filter.filters.mangiare }}",
+          dormire: "{{ translations.panels.filter.filters.dormire }}",
+          lavarsi: "{{ translations.panels.filter.filters.lavarsi }}",
+          documenti: "{{ translations.panels.filter.filters.documenti }}",
+          ascolto: "{{ translations.panels.filter.filters.ascolto }}"
+        },
+        activeFilters: ['mangiare', 'dormire', 'lavarsi', 'documenti', 'ascolto'],
+
+        userLat: null,
+        userLon: null,
+        userMarker: null,
+        userSelecting: false,
+        searchAddress: '',
+        suggestions: [],
+        showSuggestions: false,
+
+        togglePanel(name) {
+          this.panel = this.panel === name ? null : name;
+        },
+
+        toggleView() {
+          this.view = this.view === 'map' ? 'list' : 'map';
+        },
+
+        toggleFilter(key) {
+          if (this.activeFilters.includes(key)) {
+            this.activeFilters = this.activeFilters.filter(k => k !== key);
+          } else {
+            this.activeFilters.push(key);
+          }
+          if (window.poiManager) window.poiManager.filterPOIs(this.activeFilters);
+        },
+
+        selectAll() {
+          this.activeFilters = Object.keys(this.filters);
+          if (window.poiManager) window.poiManager.filterPOIs(this.activeFilters);
+        },
+
+        deselectAll() {
+          this.activeFilters = [];
+          if (window.poiManager) window.poiManager.filterPOIs(this.activeFilters);
+        },
+
+        init() {
+          requestAnimationFrame(() => {
+            if (window.poiManager) {
+              window.poiManager.filterPOIs(this.activeFilters);
+            }
+            // forza Leaflet a ridisegnare la mappa
+            setTimeout(() => {
+              if (window.getMap) {
+                const map = window.getMap();
+                map.invalidateSize();
+              }
+            }, 300);
+          });
+        },
+
+        fetchSuggestions() {
+          if (!this.searchAddress || this.searchAddress.length < 3) {
+            this.suggestions = [];
+            this.showSuggestions = false;
+            return;
+          }
+
+          axios.get("/api/autocomplete", {
+            params: { query: this.searchAddress }
+            }).then(res => {
+            this.suggestions = res.data;
+            this.showSuggestions = this.suggestions.length > 5;
+        });
+
+        },
+
+        selectSuggestion(suggestion) {
+          this.setUserPosition(parseFloat(suggestion.lat), parseFloat(suggestion.lon));
+          this.searchAddress = suggestion.display_name;
+          this.showSuggestions = false;
+        },
+
+        startManualSelection() {
+          this.panel = null;
+          this.userSelecting = true;
+        },
+
+        cancelManualSelection() {
+          this.userSelecting = false;
+        },
+
+        setUserPosition(lat, lon) {
+          this.userLat = lat;
+          this.userLon = lon;
+
+          if (window.setUserMarker) {
+            window.setUserMarker(lat, lon);
+          }
+
+          this.userSelecting = false;
+
+          if (window.poiManager?.sortPOIsByDistance) {
+            window.poiManager.sortPOIsByDistance(lat, lon);
+          }
+        },
+
+        centerUserPosition() {
+            if (this.userLat && this.userLon) {
+                const map = window.getMap();
+                map.setView([this.userLat, this.userLon], 14);
+            } else {
+                alert('Posizione utente non ancora impostata.');
+            }
+        },
+
+        getUserLocation() {
+            if (!navigator.geolocation) {
+                alert("La geolocalizzazione non è supportata");
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(pos => {
+                this.setUserPosition(pos.coords.latitude, pos.coords.longitude);
+            }, err => {
+                alert("Impossibile ottenere la posizione attuale");
+            });
+        }
+      }
+    }
+  </script>
+  <script type="module" src="/static/js/main.js"></script>
+</body>
+</html>

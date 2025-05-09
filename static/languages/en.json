@@ -1,0 +1,50 @@
+{
+    "title": "Dove Guide",
+    "navbar": {
+      "filters": "Filters",
+      "position": "Location",
+      "settings": "Settings"
+    },
+    "panels": {
+      "filter": {
+        "title": "Filter",
+        "select_all": "Select all",
+        "deselect_all": "Deselect all",
+        "filters": {
+          "mangiare": "Eat",
+          "dormire": "Sleep",
+          "lavarsi": "Wash",
+          "documenti": "Documents",
+          "ascolto": "Support"
+        }
+      },
+      "position": {
+        "title": "Location",
+        "input_placeholder": "Enter an address in Rome",
+        "manual_select": "Select on the map",
+        "use_current": "Use current location"
+      },
+      "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "city": "City"
+      }
+    },
+    "manual_selection": {
+      "hint": "Tap the map to select a location",
+      "cancel": "Cancel selection"
+    },
+    "toggle_button": {
+      "map": "Map",
+      "list": "List"
+    },
+    "center_button": {
+      "alt": "Center"
+    },
+    "alerts": {
+      "no_location_support": "Geolocation is not supported",
+      "location_error": "Unable to retrieve current location",
+      "location_not_set": "User location not set yet."
+    }
+  }
+  

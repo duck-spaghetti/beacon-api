@@ -1,0 +1,50 @@
+{
+    "title": "دليل دوف",
+    "navbar": {
+      "filters": "الفلاتر",
+      "position": "الموقع",
+      "settings": "الإعدادات"
+    },
+    "panels": {
+      "filter": {
+        "title": "تصفية",
+        "select_all": "تحديد الكل",
+        "deselect_all": "إلغاء تحديد الكل",
+        "filters": {
+          "mangiare": "الطعام",
+          "dormire": "النوم",
+          "lavarsi": "النظافة",
+          "documenti": "الوثائق",
+          "ascolto": "الدعم"
+        }
+      },
+      "position": {
+        "title": "الموقع",
+        "input_placeholder": "أدخل عنوانًا في روما",
+        "manual_select": "اختر من الخريطة",
+        "use_current": "استخدم الموقع الحالي"
+      },
+      "settings": {
+        "title": "الإعدادات",
+        "language": "اللغة",
+        "city": "المدينة"
+      }
+    },
+    "manual_selection": {
+      "hint": "اضغط على الخريطة لاختيار موقع",
+      "cancel": "إلغاء التحديد"
+    },
+    "toggle_button": {
+      "map": "الخريطة",
+      "list": "القائمة"
+    },
+    "center_button": {
+      "alt": "توسيط"
+    },
+    "alerts": {
+      "no_location_support": "المتصفح لا يدعم تحديد الموقع",
+      "location_error": "تعذر الحصول على الموقع الحالي",
+      "location_not_set": "لم يتم تعيين موقع المستخدم بعد"
+    }
+  }
+  

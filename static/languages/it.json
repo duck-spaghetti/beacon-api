@@ -1,0 +1,58 @@
+{
+    "title": "Guida Dove",
+    "navbar": {
+      "filters": "Filtri",
+      "position": "Posizione",
+      "settings": "Impostazioni"
+    },
+    "panels": {
+      "filter": {
+        "title": "Filtra",
+        "select_all": "Seleziona tutto",
+        "deselect_all": "Deseleziona tutto",
+        "filters": {
+          "mangiare": "Mangiare",
+          "dormire": "Dormire",
+          "lavarsi": "Lavarsi",
+          "documenti": "Documenti",
+          "ascolto": "Ascolto"
+        }
+      },
+      "position": {
+        "title": "Posizione",
+        "input_placeholder": "Inserisci un indirizzo a Roma",
+        "manual_select": "Seleziona sulla mappa",
+        "use_current": "Usa posizione attuale"
+      },
+      "settings": {
+        "title": "Impostazioni",
+        "language": "Lingua",
+        "city": "Città"
+      }
+    },
+    "manual_selection": {
+      "hint": "Tocca la mappa per selezionare una posizione",
+      "cancel": "Annulla selezione"
+    },
+    "toggle_button": {
+      "map": "Mappa",
+      "list": "Lista"
+    },
+    "center_button": {
+      "alt": "Centra"
+    },
+    "alerts": {
+      "no_location_support": "La geolocalizzazione non è supportata",
+      "location_error": "Impossibile ottenere la posizione attuale",
+      "location_not_set": "Posizione utente non ancora impostata."
+    },
+    "labels": {
+        "address": "Indirizzo",
+        "phone": "Telefono"
+     },
+    "actions": {
+        "open_maps": "Apri Maps",
+        "call": "Chiama"
+    }
+  }
+  
