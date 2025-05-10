@@ -81,15 +81,15 @@
     <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-[95%] bg-white rounded-lg shadow p-4 z-50">
       <button @click="panel = null" class="absolute top-2 right-2 text-gray-400 hover:text-black">✕</button>
       <h2 class="text-lg font-semibold text-center mb-4">{{ translations.panels.position.title }}</h2>
-      <div class="flex flex-col gap-3 items-start w-full">
-        <div class="w-full relative">
-          <input x-model="searchAddress" @input="fetchSuggestions" @focus="fetchSuggestions" type="text" placeholder="{{ translations.panels.position.input_placeholder }}" class="w-full border rounded px-3 py-2" />
-          <ul x-show="showSuggestions" class="absolute z-50 bg-white border rounded mt-1 w-full max-h-48 overflow-y-auto shadow">
-            <template x-for="(suggestion, index) in suggestions" :key="index">
-              <li @click="selectSuggestion(suggestion)" class="px-3 py-2 hover:bg-indigo-100 cursor-pointer text-sm" x-text="suggestion.display_name"></li>
-            </template>
-          </ul>
-        </div>
+      <div class="flex flex-col gap-2 items-start w-full">
+<!--        <div class="w-full relative">-->
+<!--          <input x-model="searchAddress" @input="fetchSuggestions" @focus="fetchSuggestions" type="text" placeholder="{{ translations.panels.position.input_placeholder }}" class="w-full border rounded px-3 py-2" />-->
+<!--          <ul x-show="showSuggestions" class="absolute z-50 bg-white border rounded mt-1 w-full max-h-48 overflow-y-auto shadow">-->
+<!--            <template x-for="(suggestion, index) in suggestions" :key="index">-->
+<!--              <li @click="selectSuggestion(suggestion)" class="px-3 py-2 hover:bg-indigo-100 cursor-pointer text-sm" x-text="suggestion.display_name"></li>-->
+<!--            </template>-->
+<!--          </ul>-->
+<!--        </div>-->
         <div class="flex gap-2 w-full">
           <button @click="startManualSelection()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300">{{ translations.panels.position.manual_select }}</button>
           <button @click="getUserLocation()" class="flex-1 px-4 py-2 bg-indigo-100 text-indigo-800 rounded text-sm hover:bg-indigo-200">{{ translations.panels.position.use_current }}</button>
