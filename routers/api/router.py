@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Header, HTTPException, status
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from fastapi.responses import HTMLResponse
@@ -13,6 +13,9 @@ from fastapi.responses import JSONResponse
 import utils
 
 router = APIRouter(tags=["api"], prefix="/api")
+
+API_KEY = os.getenv("API_KEY", "secret")
+PRE_URL = os.getenv("PRE_URL", "")
 
 templates = Jinja2Templates(directory="templates")
 
@@ -74,7 +77,7 @@ def autocomplete(query: str = Query(..., min_length=2)):
         data = response.json()
 
         # Filtra lato server per sicurezza
-        filtered = [item for item in data if 
+        filtered = [item for item in data if
                     item.get("address", {}).get("city", "").lower() == "roma" or
                     "roma" in item.get("display_name", "").lower()]
 
@@ -82,5 +85,13 @@ def autocomplete(query: str = Query(..., min_length=2)):
     except requests.RequestException as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
+
+@router.get("/db-url")
+def get_db_url(x_api_key: str = Header(...)):
+    if x_api_key != API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API Key"
+        )
+    return {"url": f"{PRE_URL}/{x_api_key}-db"}
+
 #TODO: endpoint di inserimento poi
-#

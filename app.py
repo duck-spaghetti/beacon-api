@@ -4,6 +4,7 @@ import uvicorn
 from routers.api.router import router as api_router
 from routers.web.router import router as web_router
 from routers.poi import router as poi_router
+from routers.db import router as db_router
 from fastapi.staticfiles import StaticFiles
 
 
@@ -24,6 +25,7 @@ def config():
     app.include_router(api_router)
     app.include_router(web_router)
     app.include_router(poi_router)
+    app.include_router(db_router)
 
 config()
 
