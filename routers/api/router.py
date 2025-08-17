@@ -81,3 +81,6 @@ def autocomplete(query: str = Query(..., min_length=2)):
         return JSONResponse(content=filtered)
     except requests.RequestException as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+#TODO: endpoint di inserimento poi
+#

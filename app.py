@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from routers.api.router import router as api_router
 from routers.web.router import router as web_router
+from routers.poi import router as poi_router
 from fastapi.staticfiles import StaticFiles
 
 
@@ -22,6 +23,7 @@ app.add_middleware(
 def config():
     app.include_router(api_router)
     app.include_router(web_router)
+    app.include_router(poi_router)
 
 config()
 
