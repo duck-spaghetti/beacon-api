@@ -16,6 +16,7 @@ router = APIRouter(tags=["api"], prefix="/api")
 
 templates = Jinja2Templates(directory="templates")
 
+
 @router.get(
     "/services",
     # include_in_schema=False
